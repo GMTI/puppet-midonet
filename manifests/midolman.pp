@@ -21,18 +21,20 @@ class midonet::midolman(
     require => Package['midolman'],
   }
 
-  exec {'mn-set-template':
-    command => "mn-conf template-set -h local -t agent-${resource_type}-${resource_flavor}",
-    path    => '/usr/bin:/bin',
-    unless  => "mn-conf template-get -h local | grep agent-${resource_type}-${resource_flavor}",
-    require => Package['midolman'],
-  }
+  if $resource_type != '' {
+    exec {'mn-set-template':
+      command => "mn-conf template-set -h local -t agent-${resource_type}-${resource_flavor}",
+      path    => '/usr/bin:/bin',
+      unless  => "mn-conf template-get -h local | grep agent-${resource_type}-${resource_flavor}",
+      require => Package['midolman'],
+    }
 
-  file {'/etc/midolman/midolman-env.sh':
-    ensure  => link,
-    target  => "/etc/midolman/midolman-env.sh.${resource_type}.${resource_flavor}",
-    require => Package['midolman'],
-    notify  => Service['midolman'],
+    file {'/etc/midolman/midolman-env.sh':
+      ensure  => link,
+      target  => "/etc/midolman/midolman-env.sh.${resource_type}.${resource_flavor}",
+      require => Package['midolman'],
+      notify  => Service['midolman'],
+    }
   }
 
 }
