@@ -22,19 +22,19 @@ class midonet::cluster(
     require => Package['midonet-cluster'],
   }
 
-  exec {'mn-conf-metadata':
+  exec {'mn-conf-metadata-url':
     command => "mn-conf set -t default 'agent.openstack.metadata.nova_metadata_url : \"http://${management_vip}:8775\"'",
     path    => '/usr/bin:/bin',
     require => Package['midonet-tools'],
   }
 
-  exec {'mn-conf-metadata':
+  exec {'mn-conf-metadata-secret':
     command => "mn-conf set -t default 'agent.openstack.metadata.shared_secret : ${shared_secret}'",
     path    => '/usr/bin:/bin',
     require => Package['midonet-tools'],
   }
 
-  exec {'mn-conf-metadata':
+  exec {'mn-conf-metadata-state':
     command => "mn-conf set -t default 'agent.openstack.metadata.enabled : true'",
     path    => '/usr/bin:/bin',
     require => Package['midonet-tools'],
