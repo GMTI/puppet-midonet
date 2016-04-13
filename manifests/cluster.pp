@@ -1,5 +1,5 @@
 class midonet::cluster(
-  $zk_servers,
+  $zk_server_list,
   $management_vip,
   $shared_secret,
   $keystone_admin_token)
@@ -12,6 +12,8 @@ class midonet::cluster(
   package {'midonet-tools':
     ensure  => present,
   }
+
+  $zk_servers = regsubst($zk_server_list, '$', ':2181')
 
   file {'/etc/midonet/midonet.conf':
     owner   => 'root',
