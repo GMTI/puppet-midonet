@@ -1,5 +1,5 @@
 class midonet::midolman(
-  $zk_servers,
+  $zk_server_list,
   $resource_type='compute',
   $resource_flavor='large',
 )
@@ -8,6 +8,8 @@ class midonet::midolman(
   package {'midolman':
     ensure  => present,
   }
+
+  $zk_servers = regsubst($zk_server_list, '$', ':2181')
 
   file {'/etc/midolman/midolman.conf':
     ensure  => present,
