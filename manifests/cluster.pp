@@ -5,6 +5,8 @@ class midonet::cluster(
   $keystone_admin_token)
 {
 
+  $zk_servers = regsubst($zk_server_list, '$', ':2181')
+  
   file {'/etc/midonet/midonet.conf':
     owner   => 'root',
     group   => 'root',
@@ -21,8 +23,6 @@ class midonet::cluster(
   package {'midonet-tools':
     ensure  => present,
   }
-
-  $zk_servers = regsubst($zk_server_list, '$', ':2181')
 
   exec {'mn-conf-metadata-url':
     command => "mn-conf set -t default 'agent.openstack.metadata.nova_metadata_url : \"http://${management_vip}:8775\"'",
