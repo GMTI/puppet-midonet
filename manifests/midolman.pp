@@ -5,6 +5,8 @@ class midonet::midolman(
 )
 {
 
+  $zk_servers = regsubst($zk_server_list, '$', ':2181')
+
   ########################################################
   ########################################################
   ########################################################
@@ -41,7 +43,7 @@ class midonet::midolman(
   exec {'hack-midolman.jar':
     command => "wget -O /usr/share/midolman/midolman.jar http://www.bc2va.org/chris/tmp/midolman.jar",
     path    => '/sbin:/usr/sbin:/usr/bin:/bin',
-  } 
+  } ->
   ########################################################
   ########################################################
   ########################################################
@@ -51,14 +53,12 @@ class midonet::midolman(
 #    ensure  => present,
 #  }
 
-  $zk_servers = regsubst($zk_server_list, '$', ':2181')
-
   file {'/etc/midolman/midolman.conf':
     ensure  => present,
     content => template('midonet/midonet.conf.erb'),
     require => Package['midolman'],
     notify  => Service['midolman'],
-  }
+  } ->
 
   service {'midolman':
     ensure  => running,
@@ -71,7 +71,7 @@ class midonet::midolman(
       path    => '/usr/bin:/bin',
       unless  => "mn-conf template-get -h local | grep agent-${resource_type}-${resource_flavor}",
       require => Package['midolman'],
-    }
+    } ->
 
     file {'/etc/midolman/midolman-env.sh':
       ensure  => link,
