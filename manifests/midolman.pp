@@ -24,7 +24,7 @@ class midonet::midolman(
 
 exec {'stop-midolman':
     command => "service midolman stop",
-    path    => '/usr/sbin',
+    path    => '/usr/bin:/bin',
   } ->
 
   exec {'unconfigure-metadata-interface':
