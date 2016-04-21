@@ -18,8 +18,13 @@ class midonet::midolman(
     ensure  => 'installed',
   } ->
 
-  service {'midolman':
-    ensure  => 'stopped',
+ # service {'midolman':
+ #   ensure  => 'stopped',
+ # } ->
+
+exec {'stop-midolman':
+    command => "service midolman stop",
+    path    => '/usr/sbin',
   } ->
 
   exec {'unconfigure-metadata-interface':
