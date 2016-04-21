@@ -27,13 +27,18 @@ exec {'stop-midolman':
     path    => '/usr/bin:/bin',
   } ->
 
+  exec {'unconfigure-metadata-interface':
+    command => "ifconfig metadata 0.0.0.0 down",
+    path    => '/usr/bin:/bin',
+  } ->
+
   exec {'down-metadata-interface':
     command => "ip link set metadata down",
     path    => '/usr/bin:/bin',
   } ->
 
-  exec {'remove-metadata-interface':
-    command => "ip addr delete 169.254.169.254/16 dev metadata",
+  exec {'rename-metadata-interface':
+    command => "ip link set metadata name oldmetadata",
     path    => '/usr/bin:/bin',
   } ->
 
