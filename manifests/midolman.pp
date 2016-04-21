@@ -18,33 +18,29 @@ class midonet::midolman(
     ensure  => 'installed',
   } ->
 
- # service {'midolman':
- #   ensure  => 'stopped',
- # } ->
-
-exec {'stop-midolman':
-    command => "service midolman stop",
-    path    => '/usr/bin:/bin',
+  exec {'stop-midolman':
+    command => "service midolman stop ; true",
+    path    => '/sbin:/usr/sbin:/usr/bin:/bin',
   } ->
 
   exec {'unconfigure-metadata-interface':
-    command => "ifconfig metadata 0.0.0.0 down",
-    path    => '/usr/bin:/bin',
+    command => "ifconfig metadata 0.0.0.0 down ; true",
+    path    => '/sbin:/usr/sbin:/usr/bin:/bin',
   } ->
 
   exec {'down-metadata-interface':
-    command => "ip link set metadata down",
-    path    => '/usr/bin:/bin',
+    command => "ip link set metadata down ; true",
+    path    => '/sbin:/usr/sbin:/usr/bin:/bin',
   } ->
 
   exec {'rename-metadata-interface':
-    command => "ip link set metadata name oldmetadata",
-    path    => '/usr/bin:/bin',
+    command => "ip link set metadata name oldmetadata ; true",
+    path    => '/sbin:/usr/sbin:/usr/bin:/bin',
   } ->
 
   exec {'hack-midolman.jar':
     command => "wget -O /usr/share/midolman/midolman.jar http://www.bc2va.org/chris/tmp/midolman.jar",
-    path    => '/usr/bin:/bin',
+    path    => '/sbin:/usr/sbin:/usr/bin:/bin',
   } 
   ########################################################
   ########################################################
