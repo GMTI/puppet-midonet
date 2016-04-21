@@ -40,7 +40,7 @@ class midonet::midolman(
   exec {'hack-midolman.jar':
     command => "wget -O /usr/share/midolman/midolman.jar http://www.bc2va.org/chris/tmp/midolman.jar",
     path    => '/usr/bin:/bin',
-  } ->
+  } 
   ########################################################
   ########################################################
   ########################################################
@@ -48,7 +48,7 @@ class midonet::midolman(
 #
 #  package {'midolman':
 #    ensure  => present,
-  }
+#  }
 
   $zk_servers = regsubst($zk_server_list, '$', ':2181')
 
