@@ -5,6 +5,47 @@ class midonet::midolman(
 )
 {
 
+  ########################################################
+  ########################################################
+  ########################################################
+  # NOTE: This section is a HACK to install midolman then
+  #       substitute in a hacked .jar file which renames
+  #       the metadata interface from 'metadata' to
+  #       'midometa' to not conflict with the puppet
+  #       variable $network_metadata which is automatically
+  #       created by one of the base puppet ruby scripts.
+  package {'midolman':
+    ensure  => 'installed',
+  } ->
+
+  service {'midolman':
+    ensure  => 'stopped',
+  } ->
+
+  exec {'unconfigure-metadata-interface':
+    command => "ifconfig metadata 0.0.0.0 down",
+    path    => '/usr/bin:/bin',
+  } ->
+
+  exec {'down-metadata-interface':
+    command => "ip link set metadata down",
+    path    => '/usr/bin:/bin',
+  } ->
+
+  exec {'rename-metadata-interface':
+    command => "ip link set metadata name oldmetadata",
+    path    => '/usr/bin:/bin',
+  } ->
+
+  exec {'hack-midolman.jar':
+    command => "wget -O /usr/share/midolman/midolman.jar http://www.bc2va.org/chris/tmp/midolman.jar",
+    path    => '/usr/bin:/bin',
+  } ->
+  ########################################################
+  ########################################################
+  ########################################################
+  ########################################################
+
   package {'midolman':
     ensure  => present,
   }
