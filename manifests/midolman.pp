@@ -48,7 +48,7 @@ class midonet::midolman(
 #
 #  package {'midolman':
 #    ensure  => present,
-#  }
+  }
 
   $zk_servers = regsubst($zk_server_list, '$', ':2181')
 
