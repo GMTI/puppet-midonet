@@ -215,7 +215,7 @@ Puppet::Type.type(:midonet_gateway).provide(:midonet_api_caller) do
   def call_create_uplink_port(router_id, message)
     res = @connection.post do |req|
       req.url "/midonet-api/routers/#{router_id}/ports"
-      req.headers['Content-Type'] = "application/vnd.org.midonet.Port-v2+json"
+      req.headers['Content-Type'] = "application/vnd.org.midonet.Port-v3+json"
       req.body = message.to_json
     end
     return call_get_uplink_port(router_id, message["portAddress"])
